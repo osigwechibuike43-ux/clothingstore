@@ -1,69 +1,1271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chibuike Clothing Store</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VORTEX WEAR — Streetwear Redefined</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f5f0;
+    --gray-100: #e8e8e3;
+    --gray-300: #b0b0a8;
+    --gray-500: #686860;
+    --gray-800: #1e1e1a;
+    --accent: #c8b89a;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-condensed: 'Barlow Condensed', sans-serif;
+    --font-body: 'Barlow', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--white);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(245,245,240,0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.3s, height 0.3s, opacity 0.3s;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 60px;
+    transition: background 0.5s, padding 0.3s;
+    mix-blend-mode: normal;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(20px);
+    padding: 18px 60px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 28px;
+    letter-spacing: 6px;
+    color: var(--white);
+    text-decoration: none;
+    position: relative;
+  }
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 48px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: var(--font-condensed);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gray-300);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--accent);
+    transition: width 0.4s ease;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cart {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-condensed);
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--gray-300);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 10px 22px;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+  .nav-cart:hover {
+    background: var(--white);
+    color: var(--black);
+    border-color: var(--white);
+  }
+
+  .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
+  .hamburger span { display: block; width: 26px; height: 1px; background: var(--white); transition: all 0.3s; }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 700px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1800&q=85&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center 20%;
+    transform: scale(1.08);
+    animation: heroZoom 12s ease-out forwards;
+    filter: brightness(0.55);
+  }
+  @keyframes heroZoom {
+    from { transform: scale(1.08); }
+    to { transform: scale(1.0); }
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 30%,
+      rgba(10,10,10,0.3) 60%,
+      rgba(10,10,10,0.92) 100%
+    );
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 60px 80px;
+    max-width: 800px;
+    opacity: 0;
+    animation: heroFadeUp 1.2s 0.5s ease forwards;
+  }
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-condensed);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(72px, 10vw, 140px);
+    line-height: 0.92;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 24px;
+  }
+  .hero-title span { color: var(--accent); }
+
+  .hero-sub {
+    font-family: var(--font-condensed);
+    font-size: clamp(16px, 2vw, 22px);
+    font-weight: 300;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    color: var(--gray-300);
+    margin-bottom: 48px;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--font-condensed);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--white);
+    padding: 18px 44px;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.4s;
+  }
+  .hero-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform: translateX(-101%);
+    transition: transform 0.4s cubic-bezier(0.77,0,0.18,1);
+  }
+  .hero-cta:hover::before { transform: translateX(0); }
+  .hero-cta span { position: relative; z-index: 1; }
+  .hero-cta .arrow { position: relative; z-index: 1; transition: transform 0.3s; }
+  .hero-cta:hover .arrow { transform: translateX(6px); }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    right: 60px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    animation: heroFadeUp 1s 1.5s ease forwards;
+  }
+  .hero-scroll-text {
+    font-family: var(--font-condensed);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    writing-mode: vertical-rl;
+  }
+  .hero-scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--gray-500), transparent);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0%, 100% { transform: scaleY(1); opacity: 1; }
+    50% { transform: scaleY(0.5); opacity: 0.4; }
+  }
+
+  /* MARQUEE TICKER */
+  .ticker {
+    background: var(--accent);
+    padding: 14px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-track {
+    display: inline-flex;
+    animation: ticker 22s linear infinite;
+    gap: 0;
+  }
+  .ticker-item {
+    font-family: var(--font-display);
+    font-size: 15px;
+    letter-spacing: 3px;
+    color: var(--black);
+    padding: 0 40px;
+  }
+  .ticker-dot {
+    color: rgba(10,10,10,0.4);
+    font-size: 20px;
+    line-height: 1;
+    vertical-align: middle;
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SECTION COMMONS */
+  section { padding: 120px 60px; }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 64px;
+  }
+  .section-label {
+    font-family: var(--font-condensed);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(44px, 6vw, 80px);
+    line-height: 1;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+  .section-link {
+    font-family: var(--font-condensed);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gray-300);
+    text-decoration: none;
+    border-bottom: 1px solid var(--gray-800);
+    padding-bottom: 4px;
+    transition: color 0.3s, border-color 0.3s;
+    white-space: nowrap;
+    margin-left: 24px;
+    align-self: flex-end;
+  }
+  .section-link:hover { color: var(--white); border-color: var(--white); }
+
+  /* PRODUCTS GRID */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+
+  .product-card {
+    background: var(--gray-800);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    cursor: none;
+  }
+  .product-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .product-card:nth-child(2) { transition-delay: 0.08s; }
+  .product-card:nth-child(3) { transition-delay: 0.16s; }
+  .product-card:nth-child(4) { transition-delay: 0.24s; }
+  .product-card:nth-child(5) { transition-delay: 0.08s; }
+  .product-card:nth-child(6) { transition-delay: 0.16s; }
+  .product-card:nth-child(7) { transition-delay: 0.24s; }
+  .product-card:nth-child(8) { transition-delay: 0.32s; }
+  .product-card:nth-child(9) { transition-delay: 0.08s; }
+  .product-card:nth-child(10) { transition-delay: 0.16s; }
+  .product-card:nth-child(11) { transition-delay: 0.24s; }
+  .product-card:nth-child(12) { transition-delay: 0.32s; }
+
+  .product-img-wrap {
+    overflow: hidden;
+    aspect-ratio: 3/4;
+    position: relative;
+  }
+  .product-img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    filter: brightness(0.88);
+  }
+  .product-card:hover .product-img-wrap img {
+    transform: scale(1.08);
+    filter: brightness(1);
+  }
+
+  .product-badge {
+    position: absolute;
+    top: 16px; left: 16px;
+    font-family: var(--font-condensed);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    z-index: 2;
+  }
+  .badge-new { background: var(--white); color: var(--black); }
+  .badge-hot { background: #1a1a1a; color: var(--accent); border: 1px solid var(--accent); }
+  .badge-sale { background: var(--black); color: var(--white); }
+
+  .product-quick-add {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(10,10,10,0.92);
+    padding: 14px;
+    text-align: center;
+    font-family: var(--font-condensed);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--white);
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.77,0,0.18,1);
+    z-index: 2;
+  }
+  .product-card:hover .product-quick-add { transform: translateY(0); }
+  .product-quick-add:hover { background: var(--accent); color: var(--black); }
+
+  .product-info {
+    padding: 18px 16px 22px;
+    background: var(--gray-800);
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .product-name {
+    font-family: var(--font-condensed);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .product-cat {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    margin-bottom: 10px;
+  }
+  .product-price-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .product-price {
+    font-family: var(--font-condensed);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--white);
+  }
+  .product-price-old {
+    font-family: var(--font-condensed);
+    font-size: 13px;
+    color: var(--gray-500);
+    text-decoration: line-through;
+  }
+
+  /* FEATURE STRIP */
+  .feature-strip {
+    padding: 80px 60px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.05);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .feature-item {
+    padding: 40px 40px;
+    background: var(--black);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .feature-item.visible { opacity: 1; transform: translateY(0); }
+  .feature-item:nth-child(2) { transition-delay: 0.1s; }
+  .feature-item:nth-child(3) { transition-delay: 0.2s; }
+  .feature-item:nth-child(4) { transition-delay: 0.3s; }
+
+  .feature-num {
+    font-family: var(--font-display);
+    font-size: 48px;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .feature-text {
+    font-family: var(--font-condensed);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-300);
+    line-height: 1.6;
+  }
+
+  /* EDITORIAL BANNER */
+  .editorial {
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 600px;
+  }
+  .editorial-img {
+    overflow: hidden;
+    position: relative;
+  }
+  .editorial-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.7);
+    transition: transform 0.7s ease, filter 0.5s ease;
+  }
+  .editorial-img:hover img {
+    transform: scale(1.04);
+    filter: brightness(0.85);
+  }
+  .editorial-img-label {
+    position: absolute;
+    bottom: 36px; left: 40px;
+    z-index: 2;
+  }
+  .editorial-img-label h3 {
+    font-family: var(--font-display);
+    font-size: 42px;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+  .editorial-img-label a {
+    font-family: var(--font-condensed);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 2px;
+  }
+
+  /* CONTACT */
+  .contact {
+    padding: 120px 60px;
+    background: var(--gray-800);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact::before {
+    content: 'CONTACT';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-display);
+    font-size: 22vw;
+    color: rgba(255,255,255,0.02);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .contact-label {
+    font-family: var(--font-condensed);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .contact-title {
+    font-family: var(--font-display);
+    font-size: clamp(50px, 7vw, 100px);
+    letter-spacing: 4px;
+    color: var(--white);
+    line-height: 0.95;
+    margin-bottom: 24px;
+  }
+  .contact-sub {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--gray-300);
+    margin-bottom: 60px;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7;
+  }
+
+  .contact-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .btn-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #25D366;
+    color: #fff;
+    padding: 18px 44px;
+    font-family: var(--font-condensed);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-whatsapp::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #1ebe5d;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.77,0,0.18,1);
+  }
+  .btn-whatsapp:hover::before { transform: scaleX(1); transform-origin: left; }
+  .btn-whatsapp span, .btn-whatsapp svg { position: relative; z-index: 1; }
+
+  .btn-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white);
+    padding: 18px 44px;
+    font-family: var(--font-condensed);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-phone::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--white);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.77,0,0.18,1);
+  }
+  .btn-phone:hover { color: var(--black); border-color: var(--white); }
+  .btn-phone:hover::before { transform: scaleX(1); transform-origin: left; }
+  .btn-phone span, .btn-phone svg { position: relative; z-index: 1; }
+
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    padding: 80px 60px 40px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 32px;
+    letter-spacing: 6px;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+  .footer-logo span { color: var(--accent); }
+  .footer-tagline {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--gray-500);
+    line-height: 1.8;
+    max-width: 240px;
+  }
+  .footer-col h4 {
+    font-family: var(--font-condensed);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gray-300);
+    margin-bottom: 24px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 12px; }
+  .footer-col ul a {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--gray-500);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-col ul a:hover { color: var(--white); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-copy {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    color: var(--gray-500);
+  }
+  .footer-socials {
+    display: flex;
+    gap: 24px;
+  }
+  .footer-socials a {
+    font-family: var(--font-condensed);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-socials a:hover { color: var(--accent); }
+
+  /* MOBILE NAV */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--black);
+    z-index: 999;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+  }
+  .mobile-menu.open { opacity: 1; pointer-events: all; }
+  .mobile-menu a {
+    font-family: var(--font-display);
+    font-size: 52px;
+    letter-spacing: 4px;
+    color: var(--white);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .mobile-menu a:hover { color: var(--accent); }
+
+  /* RESPONSIVE */
+  @media (max-width: 1200px) {
+    .products-grid { grid-template-columns: repeat(3, 1fr); }
+    .feature-strip { grid-template-columns: repeat(2, 1fr); }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 22px 30px; }
+    nav.scrolled { padding: 16px 30px; }
+    .nav-links { display: none; }
+    .nav-cart { display: none; }
+    .hamburger { display: flex; }
+    .mobile-menu { display: flex; }
+
+    section { padding: 80px 30px; }
+    .hero-content { padding: 0 30px 60px; }
+    .hero-scroll { right: 30px; }
+    .hero-title { font-size: clamp(56px, 14vw, 90px); }
+
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+    .feature-strip { grid-template-columns: 1fr 1fr; padding: 60px 30px; }
+    .feature-item { padding: 30px 24px; }
+    .editorial { grid-template-columns: 1fr; height: auto; }
+    .editorial-img { height: 350px; }
+
+    .contact { padding: 80px 30px; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 30px; }
+    footer { padding: 60px 30px 30px; }
+    .footer-bottom { flex-direction: column; gap: 20px; text-align: center; }
+
+    .section-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+  }
+
+  @media (max-width: 600px) {
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 1px; }
+    .feature-strip { grid-template-columns: 1fr 1fr; }
+    .footer-top { grid-template-columns: 1fr; }
+    .contact-actions { flex-direction: column; width: 100%; }
+    .btn-whatsapp, .btn-phone { width: 100%; justify-content: center; }
+    .hero-title { font-size: clamp(48px, 16vw, 80px); }
+  }
+</style>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<header>
-  <h1>Chibuike Store</h1>
-  <nav>
-    <a href="#">Home</a>
-    <a href="#products">Shop</a>
-    <a href="#contact">Contact</a>
-  </nav>
-</header>
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-<!-- HERO SECTION -->
-<section class="hero">
-  <h2>Upgrade Your Style</h2>
-  <p>Modern fashion for everyone</p>
-  <button onclick="scrollToProducts()">Shop Now</button>
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home" onclick="closeMobileMenu()">Home</a>
+  <a href="#shop" onclick="closeMobileMenu()">Shop</a>
+  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">VORTEX<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#shop">Shop</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#shop" class="nav-cart">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    SHOP NOW
+  </a>
+  <div class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">SS 2025 Collection</div>
+    <h1 class="hero-title">New Season<br><span>Collection</span></h1>
+    <p class="hero-sub">Streetwear Redefined</p>
+    <a href="#shop" class="hero-cta">
+      <span>Explore Collection</span>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+  <div class="hero-scroll">
+    <span class="hero-scroll-text">Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
 </section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track" id="ticker">
+    <span class="ticker-item">FREE SHIPPING ON ORDERS ABOVE ₦50,000</span>
+    <span class="ticker-dot">·</span>
+    <span class="ticker-item">NEW SEASON — VORTEX WEAR 2025</span>
+    <span class="ticker-dot">·</span>
+    <span class="ticker-item">STREETWEAR REDEFINED</span>
+    <span class="ticker-dot">·</span>
+    <span class="ticker-item">LIMITED DROPS EVERY FRIDAY</span>
+    <span class="ticker-dot">·</span>
+    <span class="ticker-item">FREE SHIPPING ON ORDERS ABOVE ₦50,000</span>
+    <span class="ticker-dot">·</span>
+    <span class="ticker-item">NEW SEASON — VORTEX WEAR 2025</span>
+    <span class="ticker-dot">·</span>
+    <span class="ticker-item">STREETWEAR REDEFINED</span>
+    <span class="ticker-dot">·</span>
+    <span class="ticker-item">LIMITED DROPS EVERY FRIDAY</span>
+    <span class="ticker-dot">·</span>
+  </div>
+</div>
 
 <!-- PRODUCTS -->
-<section id="products" class="products">
-
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab" alt="T-shirt">
-    <h3>Classic T-Shirt</h3>
-    <p>$20</p>
-    <button onclick="buyItem('Classic T-Shirt')">Buy</button>
+<section id="shop">
+  <div class="section-header">
+    <div>
+      <div class="section-label">New Arrivals</div>
+      <h2 class="section-title">The Drop</h2>
+    </div>
+    <a href="#" class="section-link">View All →</a>
   </div>
 
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246" alt="Hoodie">
-    <h3>Black Hoodie</h3>
-    <p>$40</p>
-    <button onclick="buyItem('Black Hoodie')">Buy</button>
-  </div>
+  <div class="products-grid" id="productsGrid">
 
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f" alt="Jacket">
-    <h3>Denim Jacket</h3>
-    <p>$60</p>
-    <button onclick="buyItem('Denim Jacket')">Buy</button>
-  </div>
+    <!-- 1 -->
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <span class="product-badge badge-new">New</span>
+        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80&auto=format&fit=crop" alt="Oversized Tee" loading="lazy">
+        <div class="product-quick-add">Quick Add +</div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">Vortex Oversized Tee</div>
+        <div class="product-cat">T-Shirts</div>
+        <div class="product-price-row">
+          <span class="product-price">₦15,500</span>
+        </div>
+      </div>
+    </div>
 
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b" alt="Sneakers">
-    <h3>White Sneakers</h3>
-    <p>$50</p>
-    <button onclick="buyItem('White Sneakers')">Buy</button>
-  </div>
+    <!-- 3 -->
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80&auto=format&fit=crop" alt="Cargo Jacket" loading="lazy">
+        <div class="product-quick-add">Quick Add +</div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">Tactical Cargo Jacket</div>
+        <div class="product-cat">Jackets</div>
+        <div class="product-price-row">
+          <span class="product-price">₦42,000</span>
+        </div>
+      </div>
+    </div>
 
+    <!-- 4 -->
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <span class="product-badge badge-sale">Sale</span>
+        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80&auto=format&fit=crop" alt="Sneakers" loading="lazy">
+        <div class="product-quick-add">Quick Add +</div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">Vortex Runner 001</div>
+        <div class="product-cat">Sneakers</div>
+        <div class="product-price-row">
+          <span class="product-price">₦35,000</span>
+          <span class="product-price-old">₦45,000</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <span class="product-badge badge-new">New</span>
+        <img src="https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80&auto=format&fit=crop" alt="Snapback Cap" loading="lazy">
+        <div class="product-quick-add">Quick Add +</div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">VW Snapback Cap</div>
+        <div class="product-cat">Headwear</div>
+        <div class="product-price-row">
+          <span class="product-price">₦8,500</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <img src="https://images.unsplash.com/photo-1565084888279-aca607ecce0c?w=600&q=80&auto=format&fit=crop" alt="Graphic Tee" loading="lazy">
+        <div class="product-quick-add">Quick Add +</div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">Black Graphic Tee</div>
+        <div class="product-cat">jeans</div>
+        <div class="product-price-row">
+          <span class="product-price">₦13,000</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <span class="product-badge badge-hot">Hot</span>
+        <img src="https://images.unsplash.com/photo-1604644401890-0bd678c83788?w=600&q=80&auto=format&fit=crop" alt="Puffer Jacket" loading="lazy">
+        <div class="product-quick-add">Quick Add +</div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">Urban Puffer Jacket</div>
+        <div class="product-cat">Jackets</div>
+        <div class="product-price-row">
+          <span class="product-price">₦55,000</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <img src="https://images.unsplash.com/photo-1539185441755-769473a23570?w=600&q=80&auto=format&fit=crop" alt="Low Top Sneakers" loading="lazy">
+        <div class="product-quick-add">Quick Add +</div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">Core Low-Top Sneaker</div>
+        <div class="product-cat">Sneakers</div>
+        <div class="product-price-row">
+          <span class="product-price">₦32,000</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9 -->
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <span class="product-badge badge-new">New</span>
+        <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600&q=80&auto=format&fit=crop" alt="Zip Hoodie" loading="lazy">
+        <div class="product-quick-add">Quick Add +</div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">Zip-Up Tech Hoodie</div>
+        <div class="product-cat">Hoodies</div>
+        <div class="product-price-row">
+          <span class="product-price">₦31,000</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10 -->
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <img src="https://images.unsplash.com/photo-1561861422-a549073e547a?w=600&q=80&auto=format&fit=crop" alt="5 Panel Cap" loading="lazy">
+        <div class="product-quick-add">Quick Add +</div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">5-Panel Camp Cap</div>
+        <div class="product-cat">Headwear</div>
+        <div class="product-price-row">
+          <span class="product-price">₦7,500</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11 -->
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <span class="product-badge badge-sale">Sale</span>
+        <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80&auto=format&fit=crop" alt="Bomber Jacket" loading="lazy">
+        <div class="product-quick-add">Quick Add +</div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">Top</div>
+        <div class="product-cat">polo</div>
+        <div class="product-price-row">
+          <span class="product-price">₦38,000</span>
+          <span class="product-price-old">₦50,000</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12 -->
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <span class="product-badge badge-hot">Hot</span>
+        <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=600&q=80&auto=format&fit=crop" alt="High Top Sneakers" loading="lazy">
+        <div class="product-quick-add">Quick Add +</div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">High-Top Street Boot</div>
+        <div class="product-cat">Sneakers</div>
+        <div class="product-price-row">
+          <span class="product-price">₦48,000</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </section>
+
+<!-- FEATURE STRIP -->
+<div class="feature-strip" id="features">
+  <div class="feature-item">
+    <div class="feature-num">01</div>
+    <div class="feature-text">Premium Quality<br>Fabrics Only</div>
+  </div>
+  <div class="feature-item">
+    <div class="feature-num">02</div>
+    <div class="feature-text">Fast Delivery<br>Nationwide</div>
+  </div>
+  <div class="feature-item">
+    <div class="feature-num">03</div>
+    <div class="feature-text">Easy Returns<br>Within 14 Days</div>
+  </div>
+  <div class="feature-item">
+    <div class="feature-num">04</div>
+    <div class="feature-text">Exclusive Drops<br>Every Friday</div>
+  </div>
+</div>
+
+<!-- EDITORIAL -->
+<div class="editorial">
+  <div class="editorial-img">
+    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=85&auto=format&fit=crop" alt="Men's Collection">
+    <div class="editorial-img-label">
+      <h3>Men's<br>Drop</h3>
+      <a href="#shop">Shop Now →</a>
+    </div>
+  </div>
+  <div class="editorial-img">
+    <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=900&q=85&auto=format&fit=crop" alt="Women's Collection">
+    <div class="editorial-img-label">
+      <h3>Women's<br>Drop</h3>
+      <a href="#shop">Shop Now →</a>
+    </div>
+  </div>
+</div>
 
 <!-- CONTACT -->
-<section id="contact" class="contact">
-  <h2>Contact Us</h2>
-  <p>WhatsApp: 09168144059</p>
+<section class="contact" id="contact">
+  <div class="contact-label">Get In Touch</div>
+  <h2 class="contact-title">LET'S TALK<br>FASHION</h2>
+  <p class="contact-sub">Have questions about sizing, custom orders, or bulk purchases? We're always ready to help.</p>
+  <div class="contact-actions">
+    <a href="https://wa.me/2349168144059" target="_blank" class="btn-whatsapp">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      <span>Chat on WhatsApp</span>
+    </a>
+    <a href="tel:09168144059" class="btn-phone">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/>
+      </svg>
+      <span>09168144059</span>
+    </a>
+  </div>
 </section>
 
-<script src="script.js"></script>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">VORTEX<span>.</span></div>
+      <p class="footer-tagline">Premium streetwear crafted for those who move with purpose. Quality, style, identity.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#">New Arrivals</a></li>
+        <li><a href="#">T-Shirts</a></li>
+        <li><a href="#">Hoodies</a></li>
+        <li><a href="#">Jackets</a></li>
+        <li><a href="#">Sneakers</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Info</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Shipping</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Twitter / X</a></li>
+        <li><a href="#">TikTok</a></li>
+        <li><a href="https://wa.me/2349168144059">WhatsApp</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 VORTEX WEAR. All rights reserved.</span>
+    <div class="footer-socials">
+      <a href="#">Instagram</a>
+      <a href="#">Twitter</a>
+      <a href="#">TikTok</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    ring.style.left = ringX + 'px';
+    ring.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button, .product-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '20px';
+      cursor.style.height = '20px';
+      ring.style.width = '56px';
+      ring.style.height = '56px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '10px';
+      cursor.style.height = '10px';
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+    });
+  });
+
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Mobile menu
+  function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  function closeMobileMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.product-card, .feature-item').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Duplicate ticker for seamless loop
+  const track = document.getElementById('ticker');
+  track.innerHTML += track.innerHTML;
+</script>
 </body>
 </html>
